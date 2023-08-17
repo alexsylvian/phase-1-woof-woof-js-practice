@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const dogBar = document.getElementById('dog-bar')
     const dogInfo = document.getElementById('dog-info')
+    const dogFilter = document.getElementById('good-dog-filter')
+
+    let filterGoodDogs = false;
 
     addToDogBar()
 
@@ -48,4 +51,76 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
     }
+    dogFilter.addEventListener('click', () =>{
+        filterGoodDogs = !filterGoodDogs
+        console.log(filterGoodDogs)
+        dogFilter.textContent = `Filter Good Dogs: ${
+            filterGoodDogs ? "ON" : "OFF"}`;
+
+        dogBar.innerHTML = ""
+        fetch('http://localhost:3000/pups')
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(pup => {
+                if (!filterGoodDogs || pup.isGoodDog) {
+                    const pupSpan = document.createElement('span')
+                    pupSpan.innerText = pup.name;
+
+                    pupSpan.addEventListener('click', () => {
+                        renderPup(pup)
+                    });
+
+                    dogBar.appendChild(pupSpan)
+                }
+            })
+        })
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // dogFilter.addEventListener("click", () => {
+    //     filterGoodDogs = !filterGoodDogs;
+    //     dogFilter.textContent = `Filter good dogs: ${filterGoodDogs ? "ON" : "OFF"}`;
+    
+    //     // Clear the dog bar and re-populate based on filter
+    //     dogBar.innerHTML = "";
+    //     fetch("http://localhost:3000/pups")
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         data.forEach(dog => {
+    //           if (!filterGoodDogs || dog.isGoodDog) {
+    //             const dogSpan = document.createElement("span");
+    //             dogSpan.textContent = dog.name;
+    
+    //             dogSpan.addEventListener("click", () => {
+    //               renderPup(dog);
+    //             });
+    
+    //             dogBar.appendChild(dogSpan);
+    //           }
+    //         });
+    //       });
+    //   });
 })
